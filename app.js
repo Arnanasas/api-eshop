@@ -25,11 +25,13 @@ app.get("/api/products", async (req, res) => {
       {
         request: {
           LicenseKey: "ccf5d1eb-f03b-42cc-b943-140a61db9897",
-          Locale: "en",
+          Locale: "lt",
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
           Limit: 10,
+          IncludeRRPPrice: true,
+          branch: 1489,
         },
       }
     );
