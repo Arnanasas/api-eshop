@@ -19,6 +19,8 @@ app.get("/status", (request, response) => {
 });
 
 app.get("/api/products", async (req, res) => {
+  const offset = req.query.offset;
+  const limit = req.query.limit;
   try {
     const response = await axios.post(
       "https://api.accdistribution.net/v1/GetProducts",
@@ -28,10 +30,10 @@ app.get("/api/products", async (req, res) => {
           Locale: "lt",
           Currency: "EUR",
           CompanyId: "_al",
-          Offset: 0,
-          Limit: 10,
+          Offset: offset,
+          Limit: limit,
           IncludeRRPPrice: true,
-          branch: 1489,
+          Filters: [{ id: "branch", values: ["1489"] }],
         },
       }
     );
