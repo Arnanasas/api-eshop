@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 const productService = require("../services/ProductService");
+const Product = require("../models/Product");
 
 // Test init
 exports.getStatus = (req, res) => {
@@ -8,7 +9,7 @@ exports.getStatus = (req, res) => {
 };
 
 // Get products
-exports.getProducts = async (req, res) => {
+exports.getProductsFromAPI = async (req, res) => {
   const offset = req.query.offset;
   const limit = req.query.limit;
   try {
@@ -37,5 +38,17 @@ exports.getProducts = async (req, res) => {
   } catch (error) {
     console.error("Failed to fetch products:", error);
     res.status(500).send("Error fetching products");
+  }
+};
+
+// Get all local products
+
+exports.getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({}); // Fetch all products from the database
+    res.json(products); // Send the products as a response
+  } catch (error) {
+    console.error("Failed to fetch products from database:", error);
+    res.status(500).send("Error fetching products from database");
   }
 };
