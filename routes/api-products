@@ -6,7 +6,7 @@ const productController = require("../controllers/ProductController");
 // Define your routes
 router.get("/products", productController.getProductsFromAPI);
 
-router.get("/productsLocal", productController.getAllproducts);
+router.get("/productsLocal", productController.getAllProducts);
 
 router.get("/status", productController.getStatus);
 
