@@ -70,4 +70,22 @@ async function updateProductDetails() {
   }
 }
 
+// const pid = "398819"; // Set the PID of the product you want to update
+
+// async function updateSingleProductDetail(pid) {
+//   try {
+//     // const response = await axios.get(`https://api.example.com/getProduct/${pid}`);
+//     const productDetails =
+
+//     // Update the single product in the SingleProduct model with the new details
+//     await SingleProduct.create(productDetails);
+
+//     console.log(`Product details updated for PID: ${pid}`);
+//   } catch (error) {
+//     console.error(`Error updating product details for PID: ${pid}:`, error);
+//   }
+// }
+
+// updateSingleProductDetail(pid);
+
 updateProductDetails();

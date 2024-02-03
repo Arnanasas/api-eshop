@@ -109,11 +109,23 @@ const attributeSchema = new mongoose.Schema({
   RelatedProducts: String,
 });
 
+const priceSchema = new mongoose.Schema({
+  Value: Number,
+  OldValue: Number,
+  LatgaValue: Number,
+  LatgaOldValue: Number,
+  CurrencyCode: String,
+  SmartPoints: { type: Number, default: null }, // Assuming SmartPoints can be a number or null
+  SpCampaignId: { type: String, default: null },
+  IsSaleout: Boolean,
+});
+
 const singleProduct = new mongoose.Schema(
   {
+    PID: { type: String, unique: true, required: true },
     CountryId: String,
     ProductId: String,
-    Price: Number,
+    Price: priceSchema,
     OldPrice: Number,
     CurrencyCode: String,
     PriceChangeDate: String,
