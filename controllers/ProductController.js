@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const productService = require("../services/ProductService");
 
 // Test init
