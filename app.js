@@ -1,10 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3003;
+
+//ACCESSING THE ENVIRONMENT VARIABLES
+dotenv.config();
 
 // Start server
 
@@ -13,11 +17,8 @@ app.listen(PORT, () => {
 });
 
 // Connect to DB
-
 mongoose
-  .connect(
-    "mongodb+srv://arnas322:rtTh927RDbNH1Bhk@ecom.sft09eh.mongodb.net/?retryWrites=true&w=majority"
-  )
+  .connect(process.env.DB_CONNECT)
   .then(() => {
     console.log("Connected to the database");
   })
