@@ -29,3 +29,24 @@ mongoose
 
 const apiRoutes = require("./routes/api-products");
 app.use("/api", apiRoutes);
+
+const SingleProduct = require("ç./models/SingleProduct"); // Assuming your model is set up
+
+async function fetchAndStoreProductData() {
+  try {
+    const response = await axios.get("https://api.example.com/products"); // Replace with your actual API endpoint
+    const productData = response.data; // Assuming the API returns the data directly
+
+    // If the data needs to be transformed to fit your model, do it here
+
+    // await SingleProduct.deleteMany({}); // Optional: Clear the collection before inserting new data
+    await SingleProduct.insertMany(productData); // Insert product data into the database
+    console.log("SingleProduct data fetched and stored successfully");
+  } catch (error) {
+    console.error("Error fetching or storing product data:", error);
+  } finally {
+    mongoose.disconnect();
+  }
+}
+
+fetchAndStoreProductData();
