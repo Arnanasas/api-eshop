@@ -31,6 +31,9 @@ const apiRoutes = require("./routes/api-products");
 app.use("/api", apiRoutes);
 
 const SingleProduct = require("./models/SingleProduct"); // Assuming your model is set up
+const Product = require("./models/Product");
+
+const axios = require("axios");
 
 async function updateProductDetails() {
   try {
@@ -49,12 +52,16 @@ async function updateProductDetails() {
           },
         }
       );
-      const productDetails = response.data;
+      const productDetails = response.data.Product;
 
       // Update the product in the database with the new details
-      await Product.findOneAndUpdate({ PID: product.PID }, productDetails, {
-        new: true,
-      });
+      await SingleProduct.findOneAndUpdate(
+        { PID: product.PID },
+        productDetails,
+        {
+          new: true,
+        }
+      );
     }
 
     console.log("All products have been updated successfully");
