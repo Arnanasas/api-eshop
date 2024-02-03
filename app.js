@@ -30,7 +30,7 @@ mongoose
 const apiRoutes = require("./routes/api-products");
 app.use("/api", apiRoutes);
 
-const SingleProduct = require("ç./models/SingleProduct"); // Assuming your model is set up
+const SingleProduct = require("./models/SingleProduct"); // Assuming your model is set up
 
 async function fetchAndStoreProductData() {
   try {
