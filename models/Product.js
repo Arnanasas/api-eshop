@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const productsSchema = new mongoose.Schema({
   PID: String,
-  updatedAt: Date,
+  updatedAt: String,
 });
 
 const Products = mongoose.model("Products", productsSchema);

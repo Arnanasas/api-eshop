@@ -29,11 +29,11 @@ exports.getProducts = async (req, res) => {
     );
 
     const updateDatabase = await productService.updateOrCreateProduct(
-      response.Products
+      response.data.Products
     );
 
     // Process and send the response back
-    res.json(response.Products.json);
+    res.json(response.data.Products);
   } catch (error) {
     console.error("Failed to fetch products:", error);
     res.status(500).send("Error fetching products");

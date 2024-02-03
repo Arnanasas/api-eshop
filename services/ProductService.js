@@ -6,7 +6,7 @@ exports.updateOrCreateProduct = async (products) => {
       const { PID, updatedAt } = product;
       await Product.findOneAndUpdate(
         { PID: PID },
-        { $set: { updatedAt: new Date(updatedAt) } },
+        { $set: { updatedAt: updatedAt } },
         { upsert: true, new: true }
       );
     }
