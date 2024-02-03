@@ -52,3 +52,27 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).send("Error fetching products from database");
   }
 };
+
+exports.getProduct = async (req, res) => {
+  const productID = req.query.productID;
+  try {
+    const response = await axios.post(
+      "https://api.accdistribution.net/v1/GetProduct",
+      {
+        request: {
+          LicenseKey: "ccf5d1eb-f03b-42cc-b943-140a61db9897",
+          Locale: "lt",
+          Currency: "EUR",
+          CompanyId: "_al",
+          ProductId: productID,
+        },
+      }
+    );
+
+    // Process and send the response back
+    res.json(response.data);
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+    res.status(500).send("Error fetching products");
+  }
+};

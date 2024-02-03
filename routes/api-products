@@ -8,6 +8,8 @@ router.get("/products", productController.getProductsFromAPI);
 
 router.get("/productsLocal", productController.getAllProducts);
 
+router.get("/productData", productController.getProduct);
+
 router.get("/status", productController.getStatus);
 
 module.exports = router;
