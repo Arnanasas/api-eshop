@@ -20,7 +20,7 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 120,
+          Limit: 1000,
           IncludeRRPPrice: true,
           Filters: [{ id: "branch", values: ["1489"] }],
         },
@@ -49,8 +49,10 @@ async function fetchDataAndUpdateDatabase() {
         updateOrCreateProduct(product.PID);
       }
     }
+    return 1;
   } catch (error) {
     console.error("Failed to fetch or update products:", error);
+    return 0;
   }
 }
 
