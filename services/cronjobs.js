@@ -19,7 +19,7 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 350,
+          Limit: 500,
           IncludeRRPPrice: true,
           Filters: [{ id: "branch", values: ["1489"] }],
         },
@@ -35,6 +35,7 @@ async function fetchDataAndUpdateDatabase() {
             { PID: product.PID },
             { UpdatedAt: product.UpdatedAt }
           );
+          await new Promise((resolve) => setTimeout(resolve, 500));
           updateOrCreateProduct(product.PID);
         }
       } else {
@@ -43,6 +44,7 @@ async function fetchDataAndUpdateDatabase() {
           UpdatedAt: product.UpdatedAt,
         });
         await newProduct.save();
+        await new Promise((resolve) => setTimeout(resolve, 500));
         updateOrCreateProduct(product.PID);
       }
     }
@@ -50,6 +52,7 @@ async function fetchDataAndUpdateDatabase() {
     res.status(200);
   } catch (error) {
     console.error("Failed to fetch or update products:", error);
+    res.status(400);
   }
 }
 
