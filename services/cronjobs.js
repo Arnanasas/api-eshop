@@ -20,7 +20,7 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 100,
+          Limit: 120,
           IncludeRRPPrice: true,
           Filters: [{ id: "branch", values: ["1489"] }],
         },
