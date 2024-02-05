@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const axios = require("axios");
 const Product = require("../models/Product");
 const SingleProduct = require("../models/SingleProduct");
+const mongoose = require("mongoose");
 
 // cron.schedule('0 * * * *', function() {
 //   console.log('Running a task every hour');
