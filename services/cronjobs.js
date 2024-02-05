@@ -19,7 +19,7 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 250,
+          Limit: 50,
           IncludeRRPPrice: true,
           Filters: [{ id: "branch", values: ["1489"] }],
         },
@@ -67,9 +67,13 @@ async function updateOrCreateProduct(PID) {
     );
     const productDetails = response.data.Product;
 
-    await SingleProduct.findOneAndUpdate({ PID: product.PID }, productDetails, {
-      upsert: true,
-    });
+    await SingleProduct.findOneAndUpdate(
+      { PID: productDetails.PID },
+      productDetails,
+      {
+        upsert: true,
+      }
+    );
 
     console.log("Product details updated successfully for PID:", PID);
   } catch (error) {
