@@ -93,8 +93,8 @@ const fetchDataAndUpdateDatabase = require("../services/cronjobs");
 exports.testCron = async (req, res) => {
   try {
     fetchDataAndUpdateDatabase()
-      .then(() => console.log("Update completed successfully."))
-      .catch((error) => console.error("Error during update:", error));
+      .then(() => res.status(200))
+      .catch((error) => res.status(400));
   } catch (error) {
     console.log(error);
   }

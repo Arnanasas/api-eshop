@@ -48,11 +48,8 @@ async function fetchDataAndUpdateDatabase() {
         updateOrCreateProduct(product.PID);
       }
     }
-
-    res.status(200);
   } catch (error) {
     console.error("Failed to fetch or update products:", error);
-    res.status(400);
   }
 }
 
@@ -70,13 +67,31 @@ async function updateOrCreateProduct(PID) {
         },
       }
     );
-    const productDetails = response.data.Product;
+    const data = response.data.Product; // Assuming the product details are directly under `Product`
+
+    // Transform the data to match the sproductSchema
+    const transformedProductDetails = {
+      PID: data.PID,
+      Media: data.Medias.map((media) => media.OriginalUri),
+      UpdatedAt: data.UpdatedAt,
+      Price: mongoose.Types.Decimal128.fromString(data.Price.Value.toString()), // Ensure Price is stored as Decimal128
+      Name: data.Name,
+      Quantity: data.Stocks[0].Amount,
+      Producer: data.Producer.Name,
+      Qualities: data.Parameters.map((param) => ({
+        Name: param.ParameterName,
+        Value: param.Value,
+      })),
+      Branches: data.Branches?.map((branch) => branch.Name) || [], // Optional chaining in case Branches is not present
+    };
 
     await SingleProduct.findOneAndUpdate(
-      { PID: productDetails.PID },
-      productDetails,
+      { PID: transformedProductDetails.PID },
+      transformedProductDetails,
       {
+        new: true,
         upsert: true,
+        setDefaultsOnInsert: true,
       }
     );
 
