@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const axios = require("axios");
 const Product = require("../models/Product");
-const SingleProduct = require("../models/SingleProduct");
+const SProduct = require("../models/SProduct");
 const mongoose = require("mongoose");
 
 // cron.schedule('0 * * * *', function() {
@@ -86,7 +86,7 @@ async function updateOrCreateProduct(PID) {
       Branches: data.Branches?.map((branch) => branch.Name) || [], // Optional chaining in case Branches is not present
     };
 
-    await SingleProduct.findOneAndUpdate(
+    await SProduct.findOneAndUpdate(
       { PID: transformedProductDetails.PID },
       transformedProductDetails,
       {
