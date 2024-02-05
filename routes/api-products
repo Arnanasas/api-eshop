@@ -14,4 +14,6 @@ router.get("/allImportedProducts", productController.allImportedProducts);
 
 router.get("/status", productController.getStatus);
 
+router.post("/testCron", productController.testCron);
+
 module.exports = router;
