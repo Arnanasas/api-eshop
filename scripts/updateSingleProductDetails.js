@@ -1,4 +1,4 @@
-const SingleProduct = require("../models/SingleProduct"); // Assuming your model is set up
+const SingleProduct = require("../models/SingleProduct");
 const Product = require("../models/Product");
 
 const axios = require("axios");

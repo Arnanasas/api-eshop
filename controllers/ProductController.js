@@ -87,3 +87,15 @@ exports.allImportedProducts = async (req, res) => {
     res.status(500).send("Error fetching products from database");
   }
 };
+
+const fetchDataAndUpdateDatabase = require("../services/cronjobs");
+
+exports.testCron = async (req, res) => {
+  try {
+    fetchDataAndUpdateDatabase()
+      .then(() => console.log("Update completed successfully."))
+      .catch((error) => console.error("Error during update:", error));
+  } catch (error) {
+    console.log(error);
+  }
+};
