@@ -75,7 +75,7 @@ const mediaSchema = new mongoose.Schema({
   Uri: String,
   OriginalUri: String,
   Order: Number,
-  Title: Number,
+  Title: String,
   Description: String,
   LinkText: String,
   EELabel: Boolean,
