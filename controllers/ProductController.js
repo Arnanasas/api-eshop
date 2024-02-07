@@ -4,8 +4,19 @@ const productService = require("../services/ProductService");
 const Product = require("../models/Product");
 const SingleProduct = require("../models/SingleProduct");
 
+const WooCommerce = require("../scripts/WooCommerce");
+
 // Test init
 exports.getStatus = (req, res) => {
+  // WooCommerce.get("")
+  //   .then((response) => {
+  //     console.log(response.data);
+  //     res.send(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.response.data);
+  //   });
+
   res.send("Hello world");
 };
 
@@ -95,7 +106,9 @@ exports.testCron = async (req, res) => {
     fetchDataAndUpdateDatabase()
       .then(() => res.status(200))
       .catch((error) => res.status(400));
+    res.status(200);
   } catch (error) {
     console.log(error);
+    res.status(404);
   }
 };

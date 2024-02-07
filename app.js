@@ -30,9 +30,3 @@ mongoose
 
 const apiRoutes = require("./routes/api-products");
 app.use("/api", apiRoutes);
-
-const updateSingleProductDetails = require("./scripts/updateSingleProductDetails");
-
-// updateSingleProductDetails()
-//   .then(() => console.log("Update completed successfully."))
-//   .catch((error) => console.error("Error during update:", error));

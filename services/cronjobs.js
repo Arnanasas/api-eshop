@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const axios = require("axios");
 const Product = require("../models/Product");
-const SProduct = require("../models/SProduct");
+const SingleProduct = require("../models/SingleProduct");
 const mongoose = require("mongoose");
 
 // cron.schedule('0 * * * *', function() {
@@ -72,7 +72,7 @@ async function updateOrCreateProduct(PID) {
     );
     const data = response.data.Product; // Assuming the product details are directly under `Product`
 
-    // Transform the data to match the sproductSchema
+    // Transform the data to match the SingleProduct
     const transformedProductDetails = {
       PID: data.PID,
       Media: data.Medias.map((media) => media.OriginalUri),
@@ -88,7 +88,7 @@ async function updateOrCreateProduct(PID) {
       Branches: data.Branches?.map((branch) => branch.Name) || [], // Optional chaining in case Branches is not present
     };
 
-    await SProduct.findOneAndUpdate(
+    await SingleProduct.findOneAndUpdate(
       { PID: transformedProductDetails.PID },
       transformedProductDetails,
       {
