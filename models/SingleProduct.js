@@ -15,6 +15,10 @@ const singleProductSchema = new mongoose.Schema({
   Producer: String,
   Qualities: [othersSchema],
   Branches: [String],
+  isOnSale: Boolean,
+  oldPrice: Number,
+  PricesUpdatedAt: String,
+  StocksUpdatedAt: String,
 });
 
 const SingleProduct = mongoose.model("SingleProduct", singleProductSchema);

@@ -7,10 +7,10 @@ const mongoose = require("mongoose");
 
 const logErrorToFile = require("../scripts/logErrorToFile");
 
-// cron.schedule('0 * * * *', function() {
-//   console.log('Running a task every hour');
-//   fetchDataAndUpdateDatabase();
-// });
+cron.schedule('52 * * * *', function() {
+  console.log('Running a task every hour');
+  fetchDataAndUpdateDatabase();
+});
 
 async function fetchDataAndUpdateDatabase() {
   try {
@@ -23,9 +23,9 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 200,
+          Limit: 21000,
           IncludeRRPPrice: true,
-          Filters: [{ id: "branch", values: ["1490"] }],
+          Filters: [{ id: "branch", values: ["1489"] }],
         },
       }
     );
@@ -39,7 +39,7 @@ async function fetchDataAndUpdateDatabase() {
             { PID: product.PID },
             { UpdatedAt: product.UpdatedAt }
           );
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 800));
           updateOrCreateProduct(product.PID);
         }
       } else {
@@ -48,7 +48,7 @@ async function fetchDataAndUpdateDatabase() {
           UpdatedAt: product.UpdatedAt,
         });
         await newProduct.save();
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 800));
         updateOrCreateProduct(product.PID);
       }
     }
@@ -76,6 +76,12 @@ async function updateOrCreateProduct(PID) {
     );
     data = response.data.Product; // Assuming the product details are directly under `Product`
 
+    if (!data.Stocks || data.Stocks.length === 0 || data.Stocks[0].Amount === undefined) {
+      console.error("Stocks information is missing or incomplete for PID:", PID);
+      logErrorToFile(PID, "Stocks information is missing or incomplete", data);
+      return; // Skip further processing for this product
+    }
+
     // Transform the data to match the SingleProduct
     const transformedProductDetails = {
       PID: data.PID,
@@ -90,7 +96,27 @@ async function updateOrCreateProduct(PID) {
         Value: param.Value,
       })),
       Branches: data.Branches?.map((branch) => branch.Name) || [], // Optional chaining in case Branches is not present
+      isOnSale: data.Price.IsSaleout,
+      PricesUpdatedAt: data.PricesUpdatedAt,
+      StocksUpdatedAt: data.StocksUpdatedAt,
+      oldPrice: undefined,
     };
+
+
+    const newPrice = transformedProductDetails.Price *1.21 *1.05 + 10;
+    transformedProductDetails.Price = newPrice;
+
+        // Attempt to find the RRP for CountryId === "lt"
+    const rrpForLt = data.RRP.find(item => item.CountryId === "lt");
+
+    if (rrpForLt) {
+      // If found, use its Price
+      transformedProductDetails.oldPrice = mongoose.Types.Decimal128.fromString(rrpForLt.Price.toString());
+    } else {
+      // If not found, calculate it using the formula: (Price * 1.21 + 10) * 1.2
+      const calculatedPrice = (data.Price.Value * 1.21 + 10) * 1.2;
+      transformedProductDetails.oldPrice = mongoose.Types.Decimal128.fromString(calculatedPrice.toString());
+    }
 
     await SingleProduct.findOneAndUpdate(
       { PID: transformedProductDetails.PID },
