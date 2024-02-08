@@ -4,6 +4,9 @@ const Product = require("../models/Product");
 const SingleProduct = require("../models/SingleProduct");
 const mongoose = require("mongoose");
 
+
+const logErrorToFile = require("../scripts/logErrorToFile");
+
 // cron.schedule('0 * * * *', function() {
 //   console.log('Running a task every hour');
 //   fetchDataAndUpdateDatabase();
@@ -20,9 +23,9 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 1000,
+          Limit: 200,
           IncludeRRPPrice: true,
-          Filters: [{ id: "branch", values: ["1489"] }],
+          Filters: [{ id: "branch", values: ["1490"] }],
         },
       }
     );
@@ -57,6 +60,7 @@ async function fetchDataAndUpdateDatabase() {
 }
 
 async function updateOrCreateProduct(PID) {
+  let data;
   try {
     const response = await axios.post(
       "https://api.accdistribution.net/v1/GetProduct",
@@ -70,7 +74,7 @@ async function updateOrCreateProduct(PID) {
         },
       }
     );
-    const data = response.data.Product; // Assuming the product details are directly under `Product`
+    data = response.data.Product; // Assuming the product details are directly under `Product`
 
     // Transform the data to match the SingleProduct
     const transformedProductDetails = {
@@ -101,6 +105,7 @@ async function updateOrCreateProduct(PID) {
     console.log("Product details updated successfully for PID:", PID);
   } catch (error) {
     console.error("Error updating product details for PID:", PID, error);
+    logErrorToFile(PID, error, data);
   }
 }
 

@@ -6,18 +6,17 @@ const SingleProduct = require("../models/SingleProduct");
 
 const WooCommerce = require("../scripts/WooCommerce");
 
-// Test init
-exports.getStatus = (req, res) => {
-  // WooCommerce.get("")
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     res.send(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error.response.data);
-  //   });
+const fetchAndCreateCategories = require("../services/categories_cronjobs");
 
-  res.send("Hello world");
+
+// Test init
+exports.getStatus = async (req, res) => {
+  try {
+    const results = await fetchAndCreateCategories();
+    res.send(results);
+  } catch(error) {
+    res.status(404);
+  }
 };
 
 // Get products
@@ -82,7 +81,7 @@ exports.getProduct = async (req, res) => {
     );
 
     // Process and send the response back
-    res.json(response.data);
+    res.json(response.data.Product);
   } catch (error) {
     console.error("Failed to fetch products:", error);
     res.status(500).send("Error fetching products");
@@ -103,12 +102,10 @@ const fetchDataAndUpdateDatabase = require("../services/cronjobs");
 
 exports.testCron = async (req, res) => {
   try {
-    fetchDataAndUpdateDatabase()
-      .then(() => res.status(200))
-      .catch((error) => res.status(400));
-    res.status(200);
+    await fetchDataAndUpdateDatabase();
+    res.status(200).send("Update successful");
   } catch (error) {
     console.log(error);
-    res.status(404);
+    res.status(404).send("Failed to update database");
   }
 };
