@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3003;
 //ACCESSING THE ENVIRONMENT VARIABLES
 dotenv.config();
 
+
 // Start server
 
 app.listen(PORT, () => {
