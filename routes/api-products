@@ -16,4 +16,6 @@ router.get("/status", productController.getStatus);
 
 router.post("/testCron", productController.testCron);
 
+router.post("/add-product/:pid", productController.createProduct);
+
 module.exports = router;

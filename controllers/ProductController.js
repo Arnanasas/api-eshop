@@ -109,3 +109,39 @@ exports.testCron = async (req, res) => {
     res.status(404).send("Failed to update database");
   }
 };
+
+exports.createProduct = async (req, res) => {
+  const pid = req.params.pid;
+
+  SingleProduct.findOne({ PID: pid })
+    .then(product => {
+      if (!product) {
+        return res.status(404).send('Product not found');
+      }
+
+      // Convert MongoDB product to WooCommerce format
+      const wooCommerceProductData = {
+        name: product.Name,
+        type: 'simple',
+        regular_price: product.Price.toString(),
+        description: 'A description here', // You may want to adjust this
+        short_description: 'A short description here', // You may want to adjust this
+        categories: [], // You may need to map your 'Branches' or another field to WooCommerce categories
+        images: product.Media.map(image => ({ src: image })),
+      };
+
+      // Create product in WooCommerce
+      WooCommerce.post("products", wooCommerceProductData)
+        .then(response => {
+          res.send(response.data);
+        })
+        .catch(error => {
+          console.error(error.response.data);
+          res.status(500).send('Failed to create product in WooCommerce');
+        });
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).send('Error retrieving product from MongoDB');
+    });
+};

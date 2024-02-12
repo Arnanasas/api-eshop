@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 const logErrorToFile = require("../scripts/logErrorToFile");
 
-cron.schedule('52 * * * *', function() {
+cron.schedule('25 10 * * *', function() {
   console.log('Running a task every hour');
   fetchDataAndUpdateDatabase();
 });
@@ -23,7 +23,7 @@ async function fetchDataAndUpdateDatabase() {
           Currency: "EUR",
           CompanyId: "_al",
           Offset: 0,
-          Limit: 21000,
+          Limit: 9000,
           IncludeRRPPrice: true,
           Filters: [{ id: "branch", values: ["1489"] }],
         },
@@ -39,7 +39,7 @@ async function fetchDataAndUpdateDatabase() {
             { PID: product.PID },
             { UpdatedAt: product.UpdatedAt }
           );
-          await new Promise((resolve) => setTimeout(resolve, 800));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           updateOrCreateProduct(product.PID);
         }
       } else {
@@ -48,7 +48,7 @@ async function fetchDataAndUpdateDatabase() {
           UpdatedAt: product.UpdatedAt,
         });
         await newProduct.save();
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         updateOrCreateProduct(product.PID);
       }
     }
@@ -103,7 +103,7 @@ async function updateOrCreateProduct(PID) {
     };
 
 
-    const newPrice = transformedProductDetails.Price *1.21 *1.05 + 10;
+    const newPrice = transformedProductDetails.Price *1.21 * 1.05 + 10;
     transformedProductDetails.Price = newPrice;
 
         // Attempt to find the RRP for CountryId === "lt"

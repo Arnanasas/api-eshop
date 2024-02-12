@@ -6,10 +6,10 @@ const mongoose = require("mongoose");
 
 const WooCommerce = require("../scripts/WooCommerce");
 
-// cron.schedule('0 * * * *', function() {
-//   console.log('Running a task every hour');
-//   fetchAndCreateCategories();
-// });
+cron.schedule('* 23 * * *', function() {
+  console.log('Running a task every hour');
+  fetchAndCreateCategories();
+});
 
 
 async function fetchAndCreateCategories() {
